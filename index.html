@@ -3,17 +3,59 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.plot.ly/plotly-2.26.0.min.js" charset="utf-8"></script>
   <title>Github Pages test</title>
 </head>
 <body>
   <h1>This is a test<h1\>
   <h2>World Premiere</h2>
   <p>the objective is to :</p>
-  <li>
-    <ul>Learn how the github pages system works</ul>
-    <ul>Learn how to create multiple pages, and other basic features of web pages</ul>
-    <ul>Learn how to add data via document in the repository (such as json, xml, ...)</ul>
-    <ul>Learn how to add data representation libraries (such as plotly, or mdpl3) to represent the data neatly on the website</ul>
-  </li>
+  <ul>
+    <li>Learn how the github pages system works</li>
+    <li>Learn how to create multiple pages, and other basic features of web pages</li>
+    <li>Learn how to add data via document in the repository (such as json, xml, ...)</li>
+    <li>Learn how to add data representation libraries (such as plotly, or mdpl3) to represent the data neatly on the website</li>
+  </ul>
+  <p>For this page, I will be using the plotly graphical library to present the data</p>
+  <p>Here is an example of a Plotly plot, representing test values. This example directly comes from the <a href="https://plotly.com/javascript/getting-started/">getting started</a> page of Plotly.</p>
+  <div id="tester" style="width: 100%;height: 50%;">
+    <script>
+      TESTER = document.getElementById('tester');
+      Plotly.newPlot( TESTER, [{
+        x: [1, 2, 3, 4, 5],
+        y: [1, 2, 4, 8, 16] }], {
+        margin: { t: 0 } } );
+    </script>
+  </div>
+  <p>Here is another example of a Plotly plot, this time using test values from an associated json file in the same repository</p>
+  <div id="tester2" style="width: 100%;height: 50%;">
+    <script>
+      var test_json;
+      function ReadJSONFile() {
+        const JSONFilePath = './json_test_file.json';
+
+        // HTTP request to load JSON file
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', JSONFilePath, true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                test_json = JSON.parse(xhr.responseText);
+
+                // Print the data into the console to check it (test)
+                console.log('JSON data successfully read :', test_json);
+
+                // using the values in the document tocreate a new plot, based from the template
+                var values = test_json["json_test_file"]["test_values"][0]["values_1"];
+                console.log(values); // another temporary verification
+                TESTER = document.getElementById('tester2');
+                Plotly.newPlot( TESTER, [test_json["json_test_file"]["test_values"][0]["values_1"]], {
+                margin: { t: 0 } } );
+
+            }
+        };
+        xhr.send();
+      }
+      ReadJSONFile();
+    </script>
 </body>
 </html>
